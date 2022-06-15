@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>zolder-app-backend</artifactId>
+  <groupId>nl.brighton</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <name>zolder-app-backend</name>
+  <packaging>jar</packaging>
+  <build>
+    <finalName>zolder-app-backend</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <groupId>org.springframework.boot</groupId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
+  <version>0.0.1</version>
+
+  <dependencies>
+    <dependency>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <version>2.5.12</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit-vintage-engine</artifactId>
+          <groupId>org.junit.vintage</groupId>
+        </exclusion>
+      </exclusions>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>spring-security-test</artifactId>
+      <groupId>org.springframework.security</groupId>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
+    <dependency>
+      <artifactId>jna</artifactId>
+      <groupId>net.java.dev.jna</groupId>
+      <version>5.5.0</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>jna-platform</artifactId>
+      <groupId>net.java.dev.jna</groupId>
+      <version>5.4.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.github.oshi/oshi-core -->
+    <dependency>
+      <artifactId>oshi-core</artifactId>
+      <groupId>com.github.oshi</groupId>
+      <version>4.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver</artifactId>
+      <version>3.11.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-mongodb</artifactId>
+    </dependency>
+  </dependencies>
+
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <relativePath/>
+    <version>2.2.2.RELEASE</version>    <!-- lookup parent from repository -->
+  </parent>
+
+</project>
