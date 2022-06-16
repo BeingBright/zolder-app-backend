@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@CompoundIndex(name = "location-index", def = "{'row':1,'column':1,'location':1}", unique = true)
 @Document(collection = "location")
+@CompoundIndex(name = "location-index", def = "{'row':1,'column':1,'location':1}", unique = true)
 public class Location {
 
 
@@ -14,13 +14,15 @@ public class Location {
   private int row;
   private int column;
   private String location;
+  private String inventoryLocation;
   private int bookNumber;
 
-  public Location(String id, int row, int column, String location, int bookNumber) {
+  public Location(String id, int row, int column, String location, String inventoryLocation, int bookNumber) {
     this.id = id;
     this.row = row;
     this.column = column;
     this.location = location;
+    this.inventoryLocation = inventoryLocation;
     this.bookNumber = bookNumber;
   }
 
@@ -65,5 +67,13 @@ public class Location {
 
   public void setBookNumber(int bookNumber) {
     this.bookNumber = bookNumber;
+  }
+
+  public String getInventoryLocation() {
+    return inventoryLocation;
+  }
+
+  public void setInventoryLocation(String inventoryLocation) {
+    this.inventoryLocation = inventoryLocation;
   }
 }

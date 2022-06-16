@@ -1,3 +1,4 @@
+
 package nl.brighton.zolder;
 
 import org.springframework.boot.SpringApplication;
