@@ -30,7 +30,7 @@ public class AuthResource {
       return ResponseEntity.ok(token);
     }
 
-    throw new InvalidUserException("Unknown user");
+    throw new InvalidUserException("Invalid user credentials ");
 
   }
 
