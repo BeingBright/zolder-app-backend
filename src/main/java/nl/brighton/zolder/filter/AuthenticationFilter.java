@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Component
-@Order(3)
+//@Component
+//@Order(3)
 public class AuthenticationFilter implements Filter {
 
   private TokenEntity tokenEntity;

@@ -24,14 +24,15 @@ public class LocationResource {
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Location[]> getLocations() {
+  public ResponseEntity<Location[]> getLocations(@RequestHeader String token) {
     return ResponseEntity.ok(locationRepository.findAll().toArray(new Location[0]));
   }
 
   @ResponseBody
   @RequestMapping(path = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Location> getLocation(@PathVariable String id)
-      throws LocationNotFoundException {
+  public ResponseEntity<Location> getLocation(@PathVariable String id, @RequestHeader String token)
+          throws LocationNotFoundException {
+    tokenEntity.contains(token);
     var location = locationRepository.findById(id);
     if (!location.isPresent()) {
       throw new LocationNotFoundException(id);
@@ -43,6 +44,7 @@ public class LocationResource {
   @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Location> addLocation(@RequestBody Location location, @RequestHeader String token)
           throws DuplicateKey {
+    tokenEntity.contains(token);
     try {
       var savedLocation = locationRepository.save(location);
       locationAuditRepository.save(new LocationAudit(location, savedLocation.getBookNumber(), tokenEntity.getUserToken(token).getUser()));
@@ -55,7 +57,8 @@ public class LocationResource {
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<JSONException> removeLocation(@RequestBody Location location) {
+  public ResponseEntity<JSONException> removeLocation(@RequestBody Location location, @RequestHeader String token) {
+    tokenEntity.contains(token);
     locationRepository.delete(location);
     return ResponseEntity.ok(new JSONException(
             "Removed location",
@@ -66,7 +69,8 @@ public class LocationResource {
 
   @ResponseBody
   @RequestMapping(path = "/audit", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<LocationAudit[]> getAuditLogs() {
+  public ResponseEntity<LocationAudit[]> getAuditLogs(@RequestHeader String token) {
+    tokenEntity.contains(token);
     return ResponseEntity.ok(locationAuditRepository.findAll().toArray(new LocationAudit[0]));
   }
 
