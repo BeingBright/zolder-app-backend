@@ -25,6 +25,7 @@ public class LocationResource {
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Location[]> getLocations(@RequestHeader String token) {
+    tokenEntity.contains(token);
     return ResponseEntity.ok(locationRepository.findAll().toArray(new Location[0]));
   }
 
