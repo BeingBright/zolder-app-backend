@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "location")
-public class LocationResource {
+public class LocationResource{
 
   private LocationRepository locationRepository;
   private LocationAuditRepository locationAuditRepository;

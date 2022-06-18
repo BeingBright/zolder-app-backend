@@ -7,6 +7,7 @@ import nl.brighton.zolder.persistance.UserRepository;
 import nl.brighton.zolder.persistance.entity.TokenEntity;
 import nl.brighton.zolder.service.exception.InvalidUserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class AuthResource {
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserToken> addUser(@RequestBody User user) throws InvalidUserException {
+  public ResponseEntity<UserToken> loginUser(@RequestBody User user) throws InvalidUserException {
     var userInRepo = repository.getByUsername(user.getUsername());
 
     if (user.equals(userInRepo)) {
@@ -31,6 +32,18 @@ public class AuthResource {
     }
 
     throw new InvalidUserException("Invalid user credentials ");
+
+  }
+
+  @ResponseBody
+  @RequestMapping(path = "", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> logoutUser(@RequestHeader String token)
+      throws InvalidUserException {
+    if (tokenEntity.contains(token)) {
+      tokenEntity.removeToken(token);
+      return ResponseEntity.ok("Logged Out");
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
 
   }
 
