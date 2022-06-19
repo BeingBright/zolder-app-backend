@@ -3,14 +3,8 @@ pipeline {
     tools{
         maven 'maven 3.6.0' 
     }
-
-    options {
-        disableConcurrentBuilds()
-    }
-
     stages {
         stage('Pull') {
-            agent any
             steps {
                 echo 'Pulling Code...'
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NODE_NAME} and JOB ${env.JOB_NAME}"
@@ -18,7 +12,6 @@ pipeline {
             }
         }
         stage('Build') {
-            agent any
             steps {
                 echo 'Building...'  
                 sh "mvn clean package"
@@ -26,8 +19,8 @@ pipeline {
         }
         stage('Saving Results') {
             steps {
-                // junit '**/target/surefire-reports/TEST-*.xml'
-                archiveArtifacts '**/target/*.jar'
+                // junit 'target/surefire-reports/TEST-*.xml'
+                archiveArtifacts 'target/*.jar'
             }
         }
         stage('Deploy') {
