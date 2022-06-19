@@ -27,7 +27,7 @@ pipeline {
         stage('Saving Results') {
             steps {
                 // junit '**/target/surefire-reports/TEST-*.xml'
-                archiveArtifacts 'target/*.jar'
+                archiveArtifacts '**/target/*.jar'
             }
         }
         stage('Deploy') {
