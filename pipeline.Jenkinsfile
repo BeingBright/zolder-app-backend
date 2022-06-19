@@ -1,12 +1,16 @@
 pipeline {
     agent any
+    tools{
+        maven 'Maven 3.6.0' 
+        jdk 'jdk8' 
+    }
     stages {
         stage('Pull') {
             agent any
             steps {
                 echo 'Pulling Code...'
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NODE_NAME} and JOB ${env.JOB_NAME}"
-                git 'https://github.com/BeingBright/zolder-app-backend.git'
+                // git 'https://github.com/BeingBright/zolder-app-backend.git'
             }
         }
         stage('Build') {
