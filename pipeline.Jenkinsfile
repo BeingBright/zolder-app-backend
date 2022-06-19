@@ -36,11 +36,12 @@ pipeline {
                 sh 'docker build -t java:zolder-app-backend -f Dockerfile .'
             }
         }
-        post {
-            success {
-                junit '**/target/surefire-reports/TEST-*.xml'
-                archiveArtifacts 'target/*.jar'
-            }   
-        }
+       
+    }
+    post {
+        success {
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts 'target/*.jar'
+        }   
     }
 } 
