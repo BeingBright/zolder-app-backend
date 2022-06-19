@@ -22,11 +22,14 @@ pipeline {
                 archiveArtifacts 'target/*.jar'
             }
         }
-        stage('deploy') {
+        stage('Deploy') {
             steps {
                 echo 'Deploy...'  
+                echo 'Stopping current container...'  
                 sh 'docker stop --time=1 zolder-app-backend-container || true'
-                sh 'dokcer rm zolder-app-backend-container || true'
+                echo 'Removing current container...'  
+                sh 'docker rm zolder-app-backend-container || true'
+                echo 'Rebuilding container...'  
                 sh 'docker build -t java:zolder-app-backend -f Dockerfile .'
             }
         }

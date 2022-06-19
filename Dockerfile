@@ -1,7 +1,10 @@
-FROM arm32v7/openjdk:11
+FROM openjdk:11
 WORKDIR /
+RUN echo 'Adding .jar file to the image as app.jar'
 ADD target/*.jar app.jar
-EXPOSE 7070
+RUN echo 'Opening Port: 7000'
+EXPOSE 7000
+RUN echo 'Starting app.jar...'
 CMD java -jar app.jar
 
 

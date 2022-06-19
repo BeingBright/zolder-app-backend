@@ -2,7 +2,9 @@ package nl.brighton.zolder.dto;
 
 import java.util.Date;
 import java.util.Objects;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "location-audit")
 public class LocationAudit {
 
     private Location location;
