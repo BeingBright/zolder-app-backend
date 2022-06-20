@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "booksInLocation")
 @Document(collection = "location")
 @CompoundIndex(name = "location-index", def = "{'buildingLocation':1,'inventoryLocation':1}", unique = true)
 public class Location {

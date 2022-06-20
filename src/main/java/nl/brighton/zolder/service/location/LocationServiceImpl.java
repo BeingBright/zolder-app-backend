@@ -63,7 +63,7 @@ public class LocationServiceImpl implements
   public Location updateLocation(Location location) throws LocationNotFoundException {
     var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
         location.getBuildingLocation(), location.getInventoryLocation());
-    if (!locInDb.equals(location)) {
+    if (locInDb.getId().equals(location.getId())) {
       return locationRepository.save(location);
     }
     throw new LocationNotFoundException();
