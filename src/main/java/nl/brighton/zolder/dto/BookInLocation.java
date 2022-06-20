@@ -5,20 +5,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@Document(collection = "book-in-location")
 public class BookInLocation {
 
   @Id
   private String id;
+  @DBRef
+  private String locationID;
   private int row;
   private int column;
-  private int bookNumber;
+  private String bookId;
 
+  public boolean isEmpty() {
+    return bookId.isEmpty() || bookId.isBlank();
+  }
 }
