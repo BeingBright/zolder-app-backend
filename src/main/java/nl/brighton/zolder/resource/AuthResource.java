@@ -1,14 +1,12 @@
 package nl.brighton.zolder.resource;
 
 
+import lombok.RequiredArgsConstructor;
 import nl.brighton.zolder.dto.User;
 import nl.brighton.zolder.dto.UserToken;
-import nl.brighton.zolder.persistance.UserRepository;
-import nl.brighton.zolder.service.AuthService;
+import nl.brighton.zolder.service.auth.AuthService;
 import nl.brighton.zolder.service.exception.InvalidTokenException;
 import nl.brighton.zolder.service.exception.InvalidUserException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,48 +16,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "auth")
 public class AuthResource {
 
-  private UserRepository repository;
-
-  private AuthService authService;
+  private final AuthService authService;
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserToken> loginUser(@RequestBody User user) throws InvalidUserException {
-    var userInRepo = repository.getByUsername(user.getUsername());
-
-    if (user.equals(userInRepo)) {
-      var token = authService.generateToken(userInRepo);
-      authService.addToken(token.getToken(), token);
-      return ResponseEntity.ok(token);
-    }
-
-    throw new InvalidUserException("Invalid user credentials ");
-
+  public ResponseEntity<UserToken> loginUser(@RequestBody User user)
+      throws InvalidUserException {
+    return ResponseEntity.ok(authService.loginUser(user));
   }
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> logoutUser(@RequestHeader String token)
+  public ResponseEntity<String> logoutUser(@RequestHeader String authorization)
       throws InvalidTokenException {
-    if (authService.isValid(token)) {
-      authService.removeToken(token);
+    if (authService.isValid(authorization)) {
+      authService.removeToken(authorization);
       return ResponseEntity.ok("Logged Out");
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+    throw new InvalidTokenException();
 
   }
 
-  @Autowired
-  public void setRepository(UserRepository repository) {
-    this.repository = repository;
-  }
-
-  @Autowired
-  public void setAuthService(AuthService authService) {
-    this.authService = authService;
-  }
 }

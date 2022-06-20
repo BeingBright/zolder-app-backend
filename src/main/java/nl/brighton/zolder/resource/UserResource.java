@@ -1,73 +1,61 @@
 package nl.brighton.zolder.resource;
 
-import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import nl.brighton.zolder.dto.User;
-import nl.brighton.zolder.persistance.UserRepository;
-import nl.brighton.zolder.persistance.entity.TokenEntity;
-import nl.brighton.zolder.resource.exception.DuplicateKey;
-import nl.brighton.zolder.resource.exception.NoSuchUserException;
-import nl.brighton.zolder.resource.exception.handler.RestExceptionHandler.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
+import nl.brighton.zolder.service.auth.AuthService;
+import nl.brighton.zolder.service.exception.DuplicateUserException;
+import nl.brighton.zolder.service.exception.InvalidTokenException;
+import nl.brighton.zolder.service.exception.UserNotFoundException;
+import nl.brighton.zolder.service.user.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "user")
 public class UserResource {
 
-  private UserRepository repository;
-  private TokenEntity tokenEntity;
+  private final UserService userService;
+  private final AuthService authService;
 
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<User[]> getUsers(@RequestHeader String token) {
-    tokenEntity.contains(token);
-    var users = repository.findAll().toArray(new User[0]);
-
-    Arrays.stream(users).forEach(user -> user.setPassword(""));
-
-    return ResponseEntity.ok(users);
+  public ResponseEntity<User[]> getUsers(@RequestHeader String authorization)
+      throws InvalidTokenException {
+    authService.isValid(authorization);
+    return ResponseEntity.ok(userService.getUsers().toArray(new User[0]));
   }
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<User> addUser(@RequestBody User user, @RequestHeader String token) throws DuplicateKey {
-    tokenEntity.contains(token);
-    try {
-      return ResponseEntity.ok(repository.save(user));
-    } catch (Exception ex) {
-      throw new DuplicateKey(user.toString());
-    }
+  public ResponseEntity<User> addUser(@RequestBody User user, @RequestHeader String authorization)
+      throws InvalidTokenException, DuplicateUserException {
+    authService.isValid(authorization);
+    return ResponseEntity.ok(userService.addUser(user));
+  }
+
+  @ResponseBody
+  @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<User> updateUser(@RequestBody User user,
+      @RequestHeader String authorization)
+      throws UserNotFoundException, InvalidTokenException {
+    authService.isValid(authorization);
+    return ResponseEntity.ok(userService.updateUser(user));
   }
 
   @ResponseBody
   @RequestMapping(path = "", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<JSONException> removeUser(@RequestBody User user, @RequestHeader String token)
-          throws NoSuchUserException {
-    tokenEntity.contains(token);
-    if (repository.getByUsername(user.getUsername()) != null) {
-      repository.delete(user);
-      return ResponseEntity.ok(new JSONException(
-              String.format("User with username: '%s' removed", user.getUsername())
-      ));
-    } else {
-      throw new NoSuchUserException(
-              String.format("User with username: '%s' does not exists", user.getUsername())
-      );
-    }
-
-
-  }
-
-  @Autowired
-  public void setTokenEntity(TokenEntity tokenEntity) {
-    this.tokenEntity = tokenEntity;
-  }
-
-  @Autowired
-  public void setRepository(UserRepository repository) {
-    this.repository = repository;
+  public ResponseEntity removeUser(@RequestBody User user,
+      @RequestHeader String authorization) throws UserNotFoundException, InvalidTokenException {
+    authService.isValid(authorization);
+    userService.removeUser(user);
+    return ResponseEntity.ok().build();
   }
 }
