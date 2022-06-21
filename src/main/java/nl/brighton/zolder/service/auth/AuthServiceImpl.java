@@ -52,7 +52,6 @@ public class AuthServiceImpl implements AuthService {
       User userInDb = userService.getUser(user.getUsername());
       if (userInDb.equals(user) && userInDb.isActive()) {
         var token = tokenEntity.generateToken(userInDb);
-        System.out.println(token);
         tokenEntity.addToken(token.getToken(), token);
         return token;
       }

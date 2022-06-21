@@ -8,8 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Optional;
-import nl.brighton.zolder.dto.BookInLocation;
+
 import nl.brighton.zolder.dto.Location;
 import nl.brighton.zolder.dto.types.BuildingLocationType;
 import nl.brighton.zolder.dto.types.InventoryLocationType;
@@ -35,7 +36,7 @@ class LocationServiceImplTest {
     when(mockedLocationRepository.getLocationsByBuildingLocationAndInventoryLocation(any(),
         any())).thenReturn(
         new Location("", 1, 1, BuildingLocationType.CELC, InventoryLocationType.W,
-            new BookInLocation[0]));
+            new ArrayList<>()));
 
     sut = new LocationServiceImpl(mockedLocationRepository);
   }
@@ -71,7 +72,7 @@ class LocationServiceImplTest {
   @Test
   void addLocation() throws DuplicateLocationException {
     var dupLoc = new Location("", 1, 1, BuildingLocationType.CELC, InventoryLocationType.W,
-        new BookInLocation[0]);
+        new ArrayList<>());
     sut.addLocation(new Location());
     verify(mockedLocationRepository).save(any());
     assertThrows(DuplicateLocationException.class, () -> sut.addLocation(dupLoc));
@@ -80,7 +81,7 @@ class LocationServiceImplTest {
   @Test
   void updateLocation() throws LocationNotFoundException {
     var dupLoc = new Location("", 1, 1, BuildingLocationType.CELC, InventoryLocationType.W,
-        new BookInLocation[0]);
+        new ArrayList<>());
     sut.updateLocation(dupLoc);
     verify(mockedLocationRepository).save(any());
     assertThrows(LocationNotFoundException.class, () -> sut.updateLocation(new Location()));
@@ -89,7 +90,7 @@ class LocationServiceImplTest {
   @Test
   void removeLocation() throws UnknownLocationException {
     var loc = new Location("Present", 1, 1, BuildingLocationType.CELC, InventoryLocationType.W,
-        new BookInLocation[0]);
+        new ArrayList<>());
     sut.removeLocation(loc);
     assertThrows(UnknownLocationException.class, () -> sut.removeLocation(new Location()));
   }

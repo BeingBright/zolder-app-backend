@@ -53,7 +53,7 @@ public class LocationServiceImpl implements
   public Location addLocation(Location location) throws DuplicateLocationException {
     var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
         location.getBuildingLocation(), location.getInventoryLocation());
-    if (!locInDb.equals(location)) {
+    if (locInDb == null || !locInDb.equals(location)) {
       return locationRepository.save(location);
     }
     throw new DuplicateLocationException();
@@ -63,7 +63,7 @@ public class LocationServiceImpl implements
   public Location updateLocation(Location location) throws LocationNotFoundException {
     var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
         location.getBuildingLocation(), location.getInventoryLocation());
-    if (locInDb.getId().equals(location.getId())) {
+    if (locInDb != null && locInDb.getId().equals(location.getId())) {
       return locationRepository.save(location);
     }
     throw new LocationNotFoundException();
