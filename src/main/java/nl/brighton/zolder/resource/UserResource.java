@@ -7,6 +7,7 @@ import nl.brighton.zolder.service.exception.DuplicateUserException;
 import nl.brighton.zolder.service.exception.InvalidTokenException;
 import nl.brighton.zolder.service.exception.UserNotFoundException;
 import nl.brighton.zolder.service.user.UserService;
+import org.apache.el.stream.Stream;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +33,11 @@ public class UserResource {
   public ResponseEntity<User[]> getUsers(@RequestHeader String authorization)
       throws InvalidTokenException {
     authService.isValid(authorization);
-    return ResponseEntity.ok(userService.getUsers().toArray(new User[0]));
+    var users = userService.getUsers().toArray(new User[0]);
+    for (int i = 0; i < users.length; i++) {
+      users[i].setPassword("");
+    }
+    return ResponseEntity.ok(users);
   }
 
   @ResponseBody
