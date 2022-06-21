@@ -26,7 +26,6 @@ public class User {
   private String username;
   private String password;
   private UserType type;
-
   private boolean isActive = false;
 
   public User(String username, String password, UserType type) {
