@@ -34,9 +34,9 @@ public class UserResource {
       throws InvalidTokenException {
     authService.isValid(authorization);
     var users = userService.getUsers().toArray(new User[0]);
-    for (int i = 0; i < users.length; i++) {
-      users[i].setPassword("");
-    }
+//    for (int i = 0; i < users.length; i++) {
+//      users[i].setPassword("");
+//    }
     return ResponseEntity.ok(users);
   }
 
