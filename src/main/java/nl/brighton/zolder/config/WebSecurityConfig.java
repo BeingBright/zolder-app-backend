@@ -1,7 +1,7 @@
 package nl.brighton.zolder.config;
 
 import lombok.RequiredArgsConstructor;
-import nl.brighton.zolder.filter.JwtAuthenticationFilter;
+import nl.brighton.zolder.filter.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UnauthorizedEntryPoint unauthorizedEntryPoint;
 
-    private final JwtAuthenticationFilter authenticationFilter;
+    private final AuthenticationFilter authenticationFilter;
 
 
     public void configure(AuthenticationManagerBuilder auth) throws Exception {

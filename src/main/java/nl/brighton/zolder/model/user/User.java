@@ -23,7 +23,6 @@ public class User {
     @EqualsAndHashCode.Include
     private String password;
     private boolean isActive = false;
-    @DBRef
     private UserRoleType role;
 
     public boolean hasSameID(User user) {

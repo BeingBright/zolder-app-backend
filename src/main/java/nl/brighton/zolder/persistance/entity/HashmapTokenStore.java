@@ -12,7 +12,7 @@ public class HashmapTokenStore implements TokenEntity {
 
     private static final HashMap<String, AuthToken> tokens = new HashMap<>();
 
-    private IRandomTokenGenerator randomTokenGenerator = UUID.randomUUID()::toString;
+    private IRandomTokenGenerator randomTokenGenerator = () -> UUID.randomUUID().toString();
 
 
     @Override

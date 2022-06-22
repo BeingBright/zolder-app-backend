@@ -3,6 +3,8 @@ package nl.brighton.zolder.filter;
 import lombok.RequiredArgsConstructor;
 import nl.brighton.zolder.service.auth.AuthService;
 import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +21,9 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
     private final AuthService authService;
 
     private final UserDetailsService userDetailsService;
@@ -38,16 +41,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                System.out.println(userDetails);
-                System.out.println(authToken);
-
                 authenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            } catch (InvalidTokenException e) {
-                System.out.println(e);
+            } catch (Exception e) {
+              LOGGER.warn("'{}' Request {} on endpoint: '{} @ {}'",
+                  request.getMethod(),
+                  e.getMessage(),
+                  request.getRequestURI(),
+                  request.getRemoteAddr());
             }
         }
         chain.doFilter(request, response);
