@@ -7,7 +7,6 @@ import lombok.Setter;
 import nl.brighton.zolder.model.user.AuthToken;
 import nl.brighton.zolder.model.user.User;
 import nl.brighton.zolder.persistance.entity.TokenEntity;
-import nl.brighton.zolder.service.auth.exception.DuplicateTokenException;
 import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.UserService;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
@@ -43,8 +42,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthToken generateToken(User user) throws UserNotFoundException {
         var userInDb = userService.getUser(user.getUsername());
-        if (userInDb != null && !userInDb.isActive() && userInDb.equals(user)) {
-            var token = generateToken(user);
+        if (userInDb != null && userInDb.isActive() && userInDb.equals(user)) {
+            var token = tokenEntity.generateToken(userInDb);
             addToken(token);
             return token;
         }
@@ -52,11 +51,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean addToken(AuthToken authToken) throws DuplicateTokenException {
-        if (tokenEntity.contains(authToken.getToken())) {
-            tokenEntity.addToken(authToken.getToken(), authToken);
-            return true;
+    public void addToken(AuthToken authToken) {
+        tokenEntity.addToken(authToken.getToken(), authToken);
+    }
+
+    @Override
+    public AuthToken getToken(String token) throws InvalidTokenException {
+        var authToken = tokenEntity.getUserToken(token);
+        if (authToken != null) {
+            return authToken;
         }
-        throw new DuplicateTokenException();
+        throw new InvalidTokenException();
     }
 }

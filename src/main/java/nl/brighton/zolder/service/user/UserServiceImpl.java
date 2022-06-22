@@ -8,15 +8,21 @@ import nl.brighton.zolder.model.user.User;
 import nl.brighton.zolder.persistance.UserRepository;
 import nl.brighton.zolder.service.user.exception.DuplicateUserException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
-@Service
-public class UserServiceImpl implements UserService {
+@Service(value = "userService")
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -62,5 +68,22 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(user);
         }
         throw new UserNotFoundException(user.getUsername());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user;
+        try {
+            user = getUser(username);
+        } catch (UserNotFoundException e) {
+            throw new UsernameNotFoundException("Invalid user");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isActive(), true, true, true, getAuthority(user));
+    }
+
+    private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toString()));
+        return authorities;
     }
 }

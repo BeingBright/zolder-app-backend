@@ -28,13 +28,6 @@ public class RestExceptionHandler {
     return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, e);
   }
 
-  @ExceptionHandler({})
-  public ResponseEntity<JSONException> forbiddenHandler(Exception e, WebRequest webRequest) {
-    LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
-    return buildResponse(HttpStatus.FORBIDDEN, e);
-  }
-
-
   private ResponseEntity<JSONException> buildResponse(HttpStatus status, Exception e) {
     return ResponseEntity.status(status)
         .body(new JSONException(e.getMessage(), status.toString(), status.value()));

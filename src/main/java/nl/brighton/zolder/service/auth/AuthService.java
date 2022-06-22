@@ -13,5 +13,7 @@ public interface AuthService {
 
     AuthToken generateToken(User user) throws UserNotFoundException;
 
-    boolean addToken(AuthToken authToken) throws DuplicateTokenException;
+    void addToken(AuthToken authToken) throws DuplicateTokenException;
+
+    AuthToken getToken(String token) throws InvalidTokenException;
 }
