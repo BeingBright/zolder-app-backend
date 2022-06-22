@@ -1,6 +1,6 @@
 package nl.brighton.zolder.service.auth.exception;
 
-public class DuplicateTokenException extends Exception {
+public class DuplicateTokenException extends RuntimeException {
     public DuplicateTokenException() {
         super("Duplicate Token");
     }
