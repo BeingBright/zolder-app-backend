@@ -13,11 +13,11 @@ public interface LocationService {
 
     List<Location> getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException;
 
-    List<Location> getLocation(String locationId) throws LocationNotFoundException;
+    Location getLocation(String locationId) throws LocationNotFoundException;
 
-    boolean addLocation(Location location) throws DuplicateLocationException;
+    Location addLocation(Location location) throws DuplicateLocationException;
+
+    Location updateLocation(Location location) throws LocationNotFoundException;
 
     boolean removeLocation(Location location) throws LocationNotFoundException;
-
-    boolean updateLocation(Location location) throws LocationNotFoundException;
 }
