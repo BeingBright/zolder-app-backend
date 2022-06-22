@@ -11,9 +11,9 @@ public interface UserService {
 
     User getUser(String username) throws UserNotFoundException;
 
-    boolean addUser(User user) throws DuplicateUserException;
+    User addUser(User user) throws DuplicateUserException;
 
     boolean removeUser(User user) throws UserNotFoundException;
 
-    boolean updateUser(User user) throws UserNotFoundException;
+    User updateUser(User user) throws UserNotFoundException;
 }
