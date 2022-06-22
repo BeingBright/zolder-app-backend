@@ -27,7 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String username) throws UserNotFoundException {
-        return userRepository.getByUsername(username);
+        var user = userRepository.getByUsername(username);
+        if (user != null) {
+            return user;
+        }
+        throw new UserNotFoundException(username);
     }
 
     @Override

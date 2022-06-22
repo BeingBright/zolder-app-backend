@@ -12,6 +12,6 @@ public class BookNotFoundException extends Exception {
     }
 
     public BookNotFoundException(Book book) {
-        super("Book: '" + book + "' Not Found");
+        super("Book: '" + book.getBookId() + "' Not Found");
     }
 }

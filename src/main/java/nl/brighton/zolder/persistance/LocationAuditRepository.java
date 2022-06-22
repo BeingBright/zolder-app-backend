@@ -1,5 +1,6 @@
 package nl.brighton.zolder.persistance;
 
+import nl.brighton.zolder.model.Book;
 import nl.brighton.zolder.model.Location;
 import nl.brighton.zolder.model.LocationAudit;
 import nl.brighton.zolder.model.user.User;
@@ -12,5 +13,7 @@ public interface LocationAuditRepository extends MongoRepository<LocationAudit, 
     List<LocationAudit> getLocationAuditsByLocation(Location location);
 
     List<LocationAudit> getLocationAuditsByUser(User user);
+
+    List<LocationAudit> getLocationAuditsByBookInLocation(Book book);
 
 }

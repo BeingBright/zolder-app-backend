@@ -2,7 +2,6 @@ package nl.brighton.zolder.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -14,16 +13,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "book")
 public class Book {
 
-  @Id
-  private String Id;
-  @DBRef
-  private Location location;
-  private int row;
-  private int column;
-  private String bookId;
+    @Id
+    private String Id;
+    private int row;
+    private int column;
+    private String bookId;
 
-  public boolean isEmpty() {
-    return bookId.isEmpty() || bookId.isBlank();
-  }
+    public boolean isEmpty() {
+        return bookId.isEmpty() || bookId.isBlank();
+    }
+
 }
 
