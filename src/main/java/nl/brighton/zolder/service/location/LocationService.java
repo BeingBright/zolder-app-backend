@@ -1,29 +1,23 @@
 package nl.brighton.zolder.service.location;
 
-import java.util.List;
-import nl.brighton.zolder.dto.Location;
-import nl.brighton.zolder.dto.types.BuildingLocationType;
-import nl.brighton.zolder.dto.types.InventoryLocationType;
-import nl.brighton.zolder.resource.exception.LocationNotFoundException;
+import nl.brighton.zolder.model.Location;
 import nl.brighton.zolder.service.location.exception.DuplicateLocationException;
-import nl.brighton.zolder.service.location.exception.UnknownLocationException;
+import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
+
+import java.util.List;
 
 public interface LocationService {
+    List<Location> getLocations();
 
-  List<Location> getLocations();
+    List<Location> getLocations(String buildingLocation) throws LocationNotFoundException;
 
-  List<Location> getLocation(BuildingLocationType buildingLocationType);
+    List<Location> getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException;
 
-  Location getLocation(BuildingLocationType buildingLocationType,
-      InventoryLocationType inventoryLocationType);
+    List<Location> getLocation(String locationId) throws LocationNotFoundException;
 
-  Location getLocation(String Id) throws UnknownLocationException;
+    boolean addLocation(Location location) throws DuplicateLocationException;
 
-  Location addLocation(Location location) throws DuplicateLocationException;
+    boolean removeLocation(Location location) throws LocationNotFoundException;
 
-  Location updateLocation(Location location) throws LocationNotFoundException;
-
-  boolean removeLocation(Location location) throws UnknownLocationException;
-
-
+    boolean updateLocation(Location location) throws LocationNotFoundException;
 }

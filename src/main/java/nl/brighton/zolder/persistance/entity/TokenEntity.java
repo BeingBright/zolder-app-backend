@@ -1,17 +1,17 @@
 package nl.brighton.zolder.persistance.entity;
 
-import nl.brighton.zolder.dto.User;
-import nl.brighton.zolder.dto.UserToken;
+import nl.brighton.zolder.model.user.User;
+import nl.brighton.zolder.model.user.AuthToken;
 
 public interface TokenEntity {
 
   boolean contains(String token);
 
-  void addToken(String token, UserToken userToken);
+  void addToken(String token, AuthToken authToken);
 
   void removeToken(String token);
 
-  UserToken generateToken(User user);
+  AuthToken generateToken(User user);
 
-  UserToken getUserToken(String token);
+  AuthToken getUserToken(String token);
 }

@@ -2,14 +2,14 @@ package nl.brighton.zolder.persistance.entity;
 
 import java.util.HashMap;
 import java.util.UUID;
-import nl.brighton.zolder.dto.User;
-import nl.brighton.zolder.dto.UserToken;
+import nl.brighton.zolder.model.user.User;
+import nl.brighton.zolder.model.user.AuthToken;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HashmapTokenStore implements TokenEntity {
 
-  private static HashMap<String, UserToken> tokens = new HashMap<>();
+  private static HashMap<String, AuthToken> tokens = new HashMap<>();
   private IRandomTokenGenerator randomTokenGenerator = UUID.randomUUID()::toString;
 
 
@@ -20,8 +20,8 @@ public class HashmapTokenStore implements TokenEntity {
 
 
   @Override
-  public void addToken(String token, UserToken userToken) {
-    tokens.putIfAbsent(userToken.getToken(), userToken);
+  public void addToken(String token, AuthToken authToken) {
+    tokens.putIfAbsent(authToken.getToken(), authToken);
   }
 
   @Override
@@ -30,16 +30,16 @@ public class HashmapTokenStore implements TokenEntity {
   }
 
   @Override
-  public UserToken generateToken(User user) {
-    return new UserToken(
+  public AuthToken generateToken(User user) {
+    return new AuthToken(
         randomTokenGenerator.generate(),
         user.getUsername(),
-        user.getType()
+        user.getRole()
     );
   }
 
   @Override
-  public UserToken getUserToken(String token) {
+  public AuthToken getUserToken(String token) {
     return tokens.get(token);
   }
 

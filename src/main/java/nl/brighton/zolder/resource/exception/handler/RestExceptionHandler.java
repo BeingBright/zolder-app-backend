@@ -1,9 +1,5 @@
 package nl.brighton.zolder.resource.exception.handler;
 
-import nl.brighton.zolder.resource.exception.DuplicateKey;
-import nl.brighton.zolder.resource.exception.LocationNotFoundException;
-import nl.brighton.zolder.resource.exception.NoSuchUserException;
-import nl.brighton.zolder.service.exception.InvalidUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,9 +15,6 @@ public class RestExceptionHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger(RestExceptionHandler.class);
 
   @ExceptionHandler({
-      NoSuchUserException.class,
-      InvalidUserException.class,
-      LocationNotFoundException.class,
       NoHandlerFoundException.class
   })
   public ResponseEntity<JSONException> notFoundHandler(Exception e, WebRequest webRequest) {
@@ -35,7 +28,7 @@ public class RestExceptionHandler {
     return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, e);
   }
 
-  @ExceptionHandler({DuplicateKey.class})
+  @ExceptionHandler({})
   public ResponseEntity<JSONException> forbiddenHandler(Exception e, WebRequest webRequest) {
     LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
     return buildResponse(HttpStatus.FORBIDDEN, e);

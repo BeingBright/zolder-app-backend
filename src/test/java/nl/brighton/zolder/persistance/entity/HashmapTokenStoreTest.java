@@ -1,8 +1,8 @@
 package nl.brighton.zolder.persistance.entity;
 
-import nl.brighton.zolder.dto.User;
-import nl.brighton.zolder.dto.UserToken;
-import nl.brighton.zolder.dto.types.UserType;
+import nl.brighton.zolder.model.user.User;
+import nl.brighton.zolder.model.user.AuthToken;
+import nl.brighton.zolder.model.user.UserRoleType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ class HashmapTokenStoreTest {
   void setUp() {
     sut = new HashmapTokenStore();
 
-    sut.addToken("Token1", new UserToken("Token1", "User1", UserType.OFFICE));
-    sut.addToken("Token2", new UserToken("Token2", "User2", UserType.OFFICE));
+    sut.addToken("Token2", new AuthToken("Token2", "User2", UserRoleType.ADMIN));
+    sut.addToken("Token1", new AuthToken("Token1", "User1", UserRoleType.ADMIN));
 
     randomTokenGenerator = () -> "RandomToken";
     sut.setRandomTokenGenerator(randomTokenGenerator);
@@ -31,7 +31,7 @@ class HashmapTokenStoreTest {
 
   @Test
   void addToken() {
-    sut.addToken("Token3", new UserToken("Token3", "User3", UserType.OFFICE));
+    sut.addToken("Token3", new AuthToken("Token3", "User3", UserRoleType.ADMIN));
     Assertions.assertTrue(sut.contains("Token3"));
   }
 
@@ -45,13 +45,13 @@ class HashmapTokenStoreTest {
   @Test
   void generateToken() {
     String expected = "RandomToken";
-    var result = sut.generateToken(new User("username", "password", UserType.ADMIN));
+    var result = sut.generateToken(new User("id", "username", "password", true, UserRoleType.ADMIN));
     Assertions.assertEquals(expected, result.getToken());
   }
 
   @Test
   void getUserToken() {
-    UserToken expected = new UserToken("Token2", "User2", UserType.OFFICE);
+    AuthToken expected = new AuthToken("Token2", "User2", UserRoleType.ADMIN);
     var result = sut.getUserToken("Token2");
     Assertions.assertEquals(expected, result);
   }
