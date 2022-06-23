@@ -12,6 +12,8 @@ import nl.brighton.zolder.service.user.UserService;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
@@ -25,7 +27,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean isValid(String token) throws InvalidTokenException {
         if (tokenEntity.contains(token)) {
-            return true;
+            Date expireDate = tokenEntity.getUserToken(token).getExpireDate();
+            Date now = new Date();
+            if (expireDate.after(now)) {
+                return true;
+            } else {
+                tokenEntity.removeToken(token);
+            }
+
         }
         throw new InvalidTokenException();
     }

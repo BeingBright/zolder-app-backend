@@ -2,7 +2,6 @@ package nl.brighton.zolder.filter;
 
 import lombok.RequiredArgsConstructor;
 import nl.brighton.zolder.service.auth.AuthService;
-import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +35,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (token != null) {
             try {
                 var authToken = authService.getToken(token);
-
+                authService.isValid(authToken.getToken());
                 UserDetails userDetails = userDetailsService.loadUserByUsername(authToken.getUsername());
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
