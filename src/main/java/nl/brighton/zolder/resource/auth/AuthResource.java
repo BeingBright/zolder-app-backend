@@ -7,10 +7,10 @@ import lombok.Setter;
 import nl.brighton.zolder.model.user.AuthToken;
 import nl.brighton.zolder.model.user.User;
 import nl.brighton.zolder.service.auth.AuthService;
+import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -29,11 +29,11 @@ public class AuthResource {
         return ResponseEntity.ok(authToken);
     }
 
-    @PostAuthorize("hasRole('ADMIN')")
     @ResponseBody
-    @RequestMapping(path = "/ping", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("PONG");
+    @RequestMapping(path = "/logout", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> logout(@RequestHeader String authorization) throws InvalidTokenException {
+        authService.removeToken(authorization);
+        return ResponseEntity.ok().build();
     }
 
 }
