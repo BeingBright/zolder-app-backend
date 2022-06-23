@@ -47,7 +47,7 @@ public class UserResource {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 
-    @RequestMapping(path = "", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@RequestBody User user) throws UserNotFoundException {
         userService.removeUser(user);
         return ResponseEntity.ok().build();
