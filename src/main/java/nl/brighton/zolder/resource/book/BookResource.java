@@ -10,6 +10,7 @@ import nl.brighton.zolder.service.book.exception.BookNotFoundException;
 import nl.brighton.zolder.service.book.exception.DuplicateBookException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,18 +37,21 @@ public class BookResource {
         return ResponseEntity.ok(bookService.getBook(bookId));
     }
 
+    @PostAuthorize("hasRole('ADMIN')")
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> addBook(Book book) throws DuplicateBookException {
         return ResponseEntity.ok(bookService.addBook(book));
     }
 
+    @PostAuthorize("hasRole('ADMIN') or hasRole('WORKER')")
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> updateBook(Book book) throws BookNotFoundException {
         return ResponseEntity.ok(bookService.updateBook(book));
     }
 
+    @PostAuthorize("hasRole('ADMIN')")
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeBook(Book book) throws BookNotFoundException {
         bookService.removeBook(book);
