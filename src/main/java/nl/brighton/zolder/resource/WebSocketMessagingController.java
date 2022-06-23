@@ -11,7 +11,8 @@ public class WebSocketMessagingController {
   private final SimpMessagingTemplate simpMessagingTemplate;
 
   public void sendUpdate(String destination) {
-    simpMessagingTemplate.convertAndSend(String.format("/topic%s", destination), "");
+    simpMessagingTemplate.convertAndSend(String.format("/topic%s", destination),
+        String.format("Update @ %s", destination));
   }
 
   public void sendUpdate(String destination, Object payload) {

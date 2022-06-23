@@ -16,8 +16,11 @@ public class TokenWebSocketInterceptor extends HttpSessionHandshakeInterceptor {
   public boolean beforeHandshake(ServerHttpRequest request,
       ServerHttpResponse response, WebSocketHandler webSocketHandler,
       Map<String, Object> map) throws Exception {
+    System.out.println("__________ LOG Socket Details __________");
+    System.out.println(request);
     System.out.println(request.getHeaders());
     System.out.println(map);
+    System.out.println("__________ Print __________");
     return true;
   }
 

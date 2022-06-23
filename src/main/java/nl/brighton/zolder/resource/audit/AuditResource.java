@@ -31,8 +31,6 @@ import java.util.List;
 @PostAuthorize("hasRole('ADMIN')")
 @RequestMapping(path = "/audit")
 public class AuditResource {
-
-    private final SimpMessagingTemplate simpMessagingTemplate;
     private final AuditService auditService;
 
     @ResponseBody
