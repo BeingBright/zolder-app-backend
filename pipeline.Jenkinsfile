@@ -38,8 +38,10 @@ pipeline {
                 sh 'docker stop --time=1 zolder-app-backend-container || true'
                 echo 'Removing current container...'  
                 sh 'docker rm zolder-app-backend-container || true'
-                echo 'Rebuilding container...'  
+                echo 'Rebuilding image...'
                 sh 'docker build -t java:zolder-app-backend -f Dockerfile .'
+                echo 'Running container...'
+                sh 'docker run --network="zolder-app" --name="zolder-app-backend-container" java:zolder-app-backend .'
             }
         }
        
