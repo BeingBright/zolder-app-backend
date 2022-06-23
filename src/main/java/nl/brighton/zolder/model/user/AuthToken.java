@@ -2,6 +2,8 @@ package nl.brighton.zolder.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -11,6 +13,9 @@ import java.util.Date;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Document(collection = "auth-token")
+@CompoundIndex(name = "token-index", def = "{'token':1}", unique = true)
+
 public class AuthToken {
 
   private String token;

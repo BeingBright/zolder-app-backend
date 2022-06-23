@@ -33,7 +33,7 @@ public class AuthResource {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/logout", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    @RequestMapping(path = "/logout", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> logout(@RequestHeader String authorization) throws InvalidTokenException {
         authService.removeToken(authorization);
         return ResponseEntity.ok().build();
