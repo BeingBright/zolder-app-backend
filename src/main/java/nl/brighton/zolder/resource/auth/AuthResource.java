@@ -11,12 +11,15 @@ import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
-@RestController
+@Controller
 @RequestMapping(path = "/auth")
 public class AuthResource {
 
@@ -34,6 +37,15 @@ public class AuthResource {
     public ResponseEntity<String> logout(@RequestHeader String authorization) throws InvalidTokenException {
         authService.removeToken(authorization);
         return ResponseEntity.ok().build();
+    }
+
+    // /app/hello
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public String PingSTOMP() throws Exception {
+        System.out.println("asdasd");
+        Thread.sleep(1000);
+        return "PONG SEND BY STOMPING";
     }
 
 }

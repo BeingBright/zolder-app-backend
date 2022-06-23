@@ -11,6 +11,7 @@ import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
-@RestController
+@Controller
 @RequestMapping(path = "/location")
 public class LocationResource {
 
@@ -63,6 +64,7 @@ public class LocationResource {
     }
 
     @PostAuthorize("hasRole('ADMIN')")
+    @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeLocation(@RequestBody Location location) throws LocationNotFoundException {
         locationService.removeLocation(location);

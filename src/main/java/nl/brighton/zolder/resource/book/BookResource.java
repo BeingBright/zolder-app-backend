@@ -11,6 +11,7 @@ import nl.brighton.zolder.service.book.exception.DuplicateBookException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
-@RestController
+@Controller
 
 @RequestMapping(path = "/book")
 public class BookResource {
@@ -52,6 +53,7 @@ public class BookResource {
     }
 
     @PostAuthorize("hasRole('ADMIN')")
+    @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeBook(Book book) throws BookNotFoundException {
         bookService.removeBook(book);

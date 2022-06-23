@@ -11,6 +11,7 @@ import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
-@RestController
+@Controller
 @PostAuthorize("hasRole('ADMIN')")
 @RequestMapping(path = "/user")
 public class UserResource {
@@ -49,10 +50,12 @@ public class UserResource {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 
+    @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@RequestBody User user) throws UserNotFoundException {
         userService.removeUser(user);
         return ResponseEntity.ok().build();
     }
+
 
 }
