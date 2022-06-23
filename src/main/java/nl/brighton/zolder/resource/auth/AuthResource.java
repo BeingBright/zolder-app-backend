@@ -32,7 +32,7 @@ public class AuthResource {
     @PostAuthorize("hasRole('ADMIN')")
     @ResponseBody
     @RequestMapping(path = "/ping", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> ping() throws UserNotFoundException {
+    public ResponseEntity<String> ping() {
         return ResponseEntity.ok("PONG");
     }
 

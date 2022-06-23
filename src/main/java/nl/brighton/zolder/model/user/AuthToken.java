@@ -30,7 +30,7 @@ public class AuthToken {
     this.token = token;
     this.username = username;
     this.role = role;
-    this.expireDate = new Date(System.currentTimeMillis() + 36 * 1000);
+    this.expireDate = new Date(System.currentTimeMillis() + 3600 * 1000);
   }
 
 }
