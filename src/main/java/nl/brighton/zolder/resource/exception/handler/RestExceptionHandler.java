@@ -1,5 +1,13 @@
 package nl.brighton.zolder.resource.exception.handler;
 
+import nl.brighton.zolder.service.auth.exception.DuplicateTokenException;
+import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
+import nl.brighton.zolder.service.book.exception.BookNotFoundException;
+import nl.brighton.zolder.service.book.exception.DuplicateBookException;
+import nl.brighton.zolder.service.location.exception.DuplicateLocationException;
+import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
+import nl.brighton.zolder.service.user.exception.DuplicateUserException;
+import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,19 +24,35 @@ public class RestExceptionHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger(RestExceptionHandler.class);
 
   @ExceptionHandler({
-      NoHandlerFoundException.class
+          NoHandlerFoundException.class,
+          InvalidTokenException.class,
+          BookNotFoundException.class,
+          LocationNotFoundException.class,
+          UserNotFoundException.class
   })
   public ResponseEntity<JSONException> notFoundHandler(Exception e, WebRequest webRequest) {
     LOGGER.warn("'{}' {}", e.getMessage(), webRequest.getDescription(false));
     return buildResponse(HttpStatus.NOT_FOUND, e);
   }
 
-  @ExceptionHandler({Exception.class})
+  @ExceptionHandler({
+          Exception.class
+  })
   public ResponseEntity<JSONException> internalServerHandler(Exception e, WebRequest webRequest) {
     LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
     return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, e);
   }
 
+  @ExceptionHandler({
+          DuplicateUserException.class,
+          DuplicateTokenException.class,
+          DuplicateLocationException.class,
+          DuplicateBookException.class
+  })
+  public ResponseEntity<JSONException> notModifiedHandler(Exception e, WebRequest webRequest) {
+    LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
+    return buildResponse(HttpStatus.UNAUTHORIZED, e);
+  }
 
   @ExceptionHandler({AccessDeniedException.class})
   public ResponseEntity<JSONException> forbiddenHandler(Exception e, WebRequest webRequest) {
