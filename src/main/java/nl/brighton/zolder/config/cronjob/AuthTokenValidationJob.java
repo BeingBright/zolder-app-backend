@@ -23,7 +23,7 @@ public class AuthTokenValidationJob {
 
     @Scheduled(fixedRate = 1000 * 600)
     public void validateKnownTokens() {
-        System.out.println("asd");
+        LOGGER.info("Starting token validation job...");
         for (AuthToken token :
                 authService.getTokens()) {
             try {

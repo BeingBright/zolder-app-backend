@@ -38,7 +38,8 @@ public class HashmapTokenStore implements TokenEntity {
         return new AuthToken(
                 randomTokenGenerator.generate(),
                 user.getUsername(),
-                user.getRole()
+                user.getRole(),
+                user.isRememberMe()
         );
     }
 

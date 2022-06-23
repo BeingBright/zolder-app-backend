@@ -6,7 +6,6 @@ import lombok.Setter;
 import nl.brighton.zolder.model.user.AuthToken;
 import nl.brighton.zolder.model.user.User;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +41,8 @@ public class DatabaseTokenStore implements TokenEntity {
         return new AuthToken(
                 randomTokenGenerator.generate(),
                 user.getUsername(),
-                user.getRole()
+                user.getRole(),
+                user.isRememberMe()
         );
     }
 

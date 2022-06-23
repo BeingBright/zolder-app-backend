@@ -2,6 +2,7 @@ package nl.brighton.zolder.model.user;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +25,8 @@ public class User {
     private String password;
     private boolean isActive = false;
     private UserRoleType role;
+    @Transient
+    private boolean rememberMe = false;
 
     public boolean hasSameID(User user) {
         return this.id.equals(user.id);
@@ -31,6 +34,14 @@ public class User {
 
     public void clearPassword() {
         this.password = null;
+    }
+
+    public User(String id, String username, String password, boolean isActive, UserRoleType role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.isActive = isActive;
+        this.role = role;
     }
 }
 

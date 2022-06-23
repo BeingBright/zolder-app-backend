@@ -23,6 +23,8 @@ public class AuthToken {
   private UserRoleType role;
   @JsonIgnore
   private Date expireDate;
+  @JsonIgnore
+  private boolean rememberMe = false;
 
   public AuthToken(String token, String username, UserRoleType role, long tokenValidity) {
     this.token = token;
@@ -38,4 +40,11 @@ public class AuthToken {
     this.expireDate = new Date(System.currentTimeMillis() + 3600 * 1000);
   }
 
+  public AuthToken(String token, String username, UserRoleType role,boolean rememberMe) {
+    this.token = token;
+    this.username = username;
+    this.role = role;
+    this.expireDate = new Date(System.currentTimeMillis() + 3600 * 1000);
+    this.rememberMe = rememberMe;
+  }
 }

@@ -28,9 +28,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean isValid(String token) throws InvalidTokenException {
         if (tokenEntity.contains(token)) {
-            Date expireDate = tokenEntity.getUserToken(token).getExpireDate();
+            AuthToken authToken = tokenEntity.getUserToken(token);
+            Date expireDate = authToken.getExpireDate();
             Date now = new Date();
-            if (expireDate.after(now)) {
+            if (expireDate.after(now) || authToken.isRememberMe()) {
                 return true;
             } else {
                 tokenEntity.removeToken(token);
@@ -53,6 +54,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthToken generateToken(User user) throws UserNotFoundException {
         var userInDb = userService.getUser(user.getUsername());
         if (userInDb != null && userInDb.isActive() && userInDb.equals(user)) {
+            userInDb.setRememberMe(user.isRememberMe());
             var token = tokenEntity.generateToken(userInDb);
             addToken(token);
             return token;
