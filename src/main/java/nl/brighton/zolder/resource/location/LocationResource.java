@@ -39,7 +39,7 @@ public class LocationResource {
 
     @ResponseBody
     @RequestMapping(path = "/location/{buildingLocation}/inventoryLocation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Location>> getLocations(@PathVariable String buildingLocation, @PathVariable String inventoryLocation) throws LocationNotFoundException {
+    public ResponseEntity<Location> getLocations(@PathVariable String buildingLocation, @PathVariable String inventoryLocation) throws LocationNotFoundException {
         return ResponseEntity.ok(locationService.getLocations(buildingLocation, inventoryLocation));
     }
 

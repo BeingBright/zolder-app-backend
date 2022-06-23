@@ -11,7 +11,7 @@ public interface LocationService {
 
     List<Location> getLocations(String buildingLocation) throws LocationNotFoundException;
 
-    List<Location> getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException;
+    Location getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException;
 
     Location getLocation(String locationId) throws LocationNotFoundException;
 

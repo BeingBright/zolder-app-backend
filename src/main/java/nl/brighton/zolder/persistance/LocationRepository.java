@@ -9,7 +9,7 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 
     List<Location> getLocationsByBuildingLocation(String buildingLocation);
 
-    List<Location> getLocationsByBuildingLocationAndInventoryLocation(String buildingLocation, String inventoryLocation);
+    Location getLocationsByBuildingLocationAndInventoryLocation(String buildingLocation, String inventoryLocation);
 
     Location getLocationById(String Id);
 

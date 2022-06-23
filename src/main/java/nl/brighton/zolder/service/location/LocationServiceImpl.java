@@ -35,7 +35,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<Location> getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException {
+    public Location getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException {
         var locations = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(buildingLocation, inventoryLocation);
         if (locations != null) {
             return locations;
