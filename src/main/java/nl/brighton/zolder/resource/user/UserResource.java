@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
 @Setter(AccessLevel.NONE)
@@ -25,8 +27,8 @@ public class UserResource {
 
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User[]> getUsers() {
-        return ResponseEntity.ok(userService.getUsers().toArray(new User[0]));
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @ResponseBody
