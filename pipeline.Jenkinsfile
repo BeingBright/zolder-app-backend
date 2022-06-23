@@ -33,15 +33,22 @@ pipeline {
         stage('Deploy') 
         {
             steps {
-                echo 'Deploy...'  
+                echo 'Deploy...'
+
                 echo 'Stopping current container...'  
                 sh 'docker stop --time=1 zolder-app-backend-container || true'
+
                 echo 'Removing current container...'  
                 sh 'docker rm zolder-app-backend-container || true'
+
+                echo 'Removing current image...'
+                sh 'docker rmi java:zolder-app-backend || true'
+
                 echo 'Rebuilding image...'
                 sh 'docker build -t java:zolder-app-backend -f Dockerfile .'
+
                 echo 'Running container...'
-                sh 'docker run --network="zolder-app" --name="zolder-app-backend-container" java:zolder-app-backend .'
+                sh 'docker run -p 7000:7000 -d --name=zolder-app-backend-container --network=zolder-app java:zolder-app-backend'
             }
         }
        
