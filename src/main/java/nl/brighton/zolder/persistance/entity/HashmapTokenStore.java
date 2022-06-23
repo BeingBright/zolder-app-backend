@@ -4,7 +4,9 @@ import nl.brighton.zolder.model.user.AuthToken;
 import nl.brighton.zolder.model.user.User;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,6 +45,11 @@ public class HashmapTokenStore implements TokenEntity {
     @Override
     public AuthToken getUserToken(String token) {
         return tokens.get(token);
+    }
+
+    @Override
+    public List<AuthToken> getTokens() {
+        return new ArrayList<>(tokens.values());
     }
 
     public void setRandomTokenGenerator(

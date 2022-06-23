@@ -6,6 +6,8 @@ import nl.brighton.zolder.service.auth.exception.DuplicateTokenException;
 import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 
+import java.util.List;
+
 public interface AuthService {
     boolean isValid(String token) throws InvalidTokenException;
 
@@ -16,4 +18,6 @@ public interface AuthService {
     void addToken(AuthToken authToken) throws DuplicateTokenException;
 
     AuthToken getToken(String token) throws InvalidTokenException;
+
+    List<AuthToken> getTokens();
 }

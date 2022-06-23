@@ -1,8 +1,5 @@
 package nl.brighton.zolder.config;
 
-import nl.brighton.zolder.filter.RequestResponseLoggingFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,8 +10,6 @@ import java.io.IOException;
 
 @Component
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {

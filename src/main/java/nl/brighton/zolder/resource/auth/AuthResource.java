@@ -43,8 +43,6 @@ public class AuthResource {
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
     public String PingSTOMP() throws Exception {
-        System.out.println("asdasd");
-        Thread.sleep(1000);
         return "PONG SEND BY STOMPING";
     }
 

@@ -3,6 +3,8 @@ package nl.brighton.zolder.persistance.entity;
 import nl.brighton.zolder.model.user.User;
 import nl.brighton.zolder.model.user.AuthToken;
 
+import java.util.List;
+
 public interface TokenEntity {
 
   boolean contains(String token);
@@ -14,4 +16,6 @@ public interface TokenEntity {
   AuthToken generateToken(User user);
 
   AuthToken getUserToken(String token);
+
+    List<AuthToken> getTokens();
 }

@@ -13,6 +13,7 @@ import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.NONE)
@@ -71,5 +72,10 @@ public class AuthServiceImpl implements AuthService {
             return authToken;
         }
         throw new InvalidTokenException();
+    }
+
+    @Override
+    public List<AuthToken> getTokens() {
+        return tokenEntity.getTokens();
     }
 }

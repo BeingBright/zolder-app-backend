@@ -9,14 +9,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
-
-interface AuthTokenRepository extends MongoRepository<AuthToken, String> {
-    AuthToken getByToken(String token);
-
-    void deleteAuthTokenByToken(String token);
-
-}
 
 @Service
 @Primary
@@ -55,5 +49,10 @@ public class DatabaseTokenStore implements TokenEntity {
     @Override
     public AuthToken getUserToken(String token) {
         return tokenRepository.getByToken(token);
+    }
+
+    @Override
+    public List<AuthToken> getTokens() {
+        return tokenRepository.findAll();
     }
 }
