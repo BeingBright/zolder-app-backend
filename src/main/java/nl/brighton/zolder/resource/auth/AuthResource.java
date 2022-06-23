@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +23,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/auth")
 public class AuthResource {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
-
     private final AuthService authService;
 
     @ResponseBody
     @RequestMapping(path = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthToken> generateToken(@RequestBody User user) throws UserNotFoundException {
         AuthToken authToken = authService.generateToken(user);
-        simpMessagingTemplate.convertAndSend("/topic/greetings","Send to all users");
         return ResponseEntity.ok(authToken);
     }
 
@@ -47,8 +43,7 @@ public class AuthResource {
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
     public String PingSTOMP() throws Exception {
-
         return "PONG SEND BY STOMPING";
     }
-
+//simpMessagingTemplate.convertAndSend("/topic/greetings","Send to all users");
 }

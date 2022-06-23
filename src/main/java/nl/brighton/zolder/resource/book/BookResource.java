@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import nl.brighton.zolder.model.Book;
+import nl.brighton.zolder.resource.WebSocketMessagingController;
 import nl.brighton.zolder.service.book.BookService;
 import nl.brighton.zolder.service.book.exception.BookNotFoundException;
 import nl.brighton.zolder.service.book.exception.DuplicateBookException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import java.util.List;
 @RequestMapping(path = "/book")
 public class BookResource {
 
+    private final WebSocketMessagingController messagingController;
     private final BookService bookService;
 
     @ResponseBody
@@ -42,6 +45,7 @@ public class BookResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> addBook(Book book) throws DuplicateBookException {
+        messagingController.sendUpdate("/book");
         return ResponseEntity.ok(bookService.addBook(book));
     }
 
@@ -49,6 +53,7 @@ public class BookResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> updateBook(Book book) throws BookNotFoundException {
+        messagingController.sendUpdate("/book");
         return ResponseEntity.ok(bookService.updateBook(book));
     }
 
@@ -56,6 +61,7 @@ public class BookResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity removeBook(Book book) throws BookNotFoundException {
+        messagingController.sendUpdate("/book");
         bookService.removeBook(book);
         return ResponseEntity.ok().build();
     }

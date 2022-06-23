@@ -14,6 +14,7 @@ import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ import java.util.List;
 @RequestMapping(path = "/audit")
 public class AuditResource {
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final AuditService auditService;
 
     @ResponseBody

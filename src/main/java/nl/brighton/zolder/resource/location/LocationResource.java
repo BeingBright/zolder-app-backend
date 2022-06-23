@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import nl.brighton.zolder.model.Location;
+import nl.brighton.zolder.resource.WebSocketMessagingController;
 import nl.brighton.zolder.service.location.LocationService;
 import nl.brighton.zolder.service.location.exception.DuplicateLocationException;
 import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequestMapping(path = "/location")
 public class LocationResource {
 
+    private final WebSocketMessagingController messagingController;
     private final LocationService locationService;
 
     @ResponseBody
@@ -53,6 +56,7 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Location> addLocation(@RequestBody Location location) throws DuplicateLocationException {
+        messagingController.sendUpdate("/location");
         return ResponseEntity.ok(locationService.addLocation(location));
     }
 
@@ -60,6 +64,7 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Location> updateLocation(@RequestBody Location location) throws LocationNotFoundException {
+        messagingController.sendUpdate("/location");
         return ResponseEntity.ok(locationService.updateLocation(location));
     }
 
@@ -67,6 +72,7 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeLocation(@RequestBody Location location) throws LocationNotFoundException {
+        messagingController.sendUpdate("/location");
         locationService.removeLocation(location);
         return ResponseEntity.ok().build();
     }
