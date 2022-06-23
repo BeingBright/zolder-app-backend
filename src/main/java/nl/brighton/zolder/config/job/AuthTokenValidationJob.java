@@ -1,4 +1,4 @@
-package nl.brighton.zolder.config.cronjob;
+package nl.brighton.zolder.config.job;
 
 import lombok.RequiredArgsConstructor;
 import nl.brighton.zolder.model.user.AuthToken;
