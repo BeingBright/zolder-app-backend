@@ -4,62 +4,80 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import nl.brighton.zolder.dto.User;
-import nl.brighton.zolder.dto.UserToken;
+import nl.brighton.zolder.model.user.AuthToken;
+import nl.brighton.zolder.model.user.User;
 import nl.brighton.zolder.persistance.entity.TokenEntity;
-import nl.brighton.zolder.service.exception.InvalidTokenException;
-import nl.brighton.zolder.service.exception.InvalidUserException;
-import nl.brighton.zolder.service.exception.UserNotFoundException;
+import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.UserService;
+import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @RequiredArgsConstructor
-@Service
-@Setter(AccessLevel.NONE)
 @Getter(AccessLevel.NONE)
+@Setter(AccessLevel.NONE)
+@Service
 public class AuthServiceImpl implements AuthService {
 
-  private final TokenEntity tokenEntity;
-  private final UserService userService;
+    private final UserService userService;
 
-  @Override
-  public boolean isValid(String token) throws InvalidTokenException {
+    private final TokenEntity tokenEntity;
 
-    if (tokenEntity.contains(token)) {
-      return true;
+    @Override
+    public boolean isValid(String token) throws InvalidTokenException {
+        if (tokenEntity.contains(token)) {
+            AuthToken authToken = tokenEntity.getUserToken(token);
+            Date expireDate = authToken.getExpireDate();
+            Date now = new Date();
+            if (expireDate.after(now) || authToken.isRememberMe()) {
+                return true;
+            } else {
+                tokenEntity.removeToken(token);
+            }
+
+        }
+        throw new InvalidTokenException();
     }
-    throw new InvalidTokenException();
-  }
 
-  @Override
-  public void removeToken(String token) {
-    tokenEntity.removeToken(token);
-  }
-
-  @Override
-  public UserToken generateToken(User user) {
-    return tokenEntity.generateToken(user);
-  }
-
-  @Override
-  public void addToken(String token, UserToken userToken) {
-    tokenEntity.addToken(token, userToken);
-  }
-
-  @Override
-  public UserToken loginUser(User user) throws InvalidUserException {
-    try {
-      User userInDb = userService.getUser(user.getUsername());
-      if (userInDb.equals(user) && userInDb.isActive()) {
-        var token = tokenEntity.generateToken(userInDb);
-        tokenEntity.addToken(token.getToken(), token);
-        return token;
-      }
-      throw new InvalidUserException();
-    } catch (UserNotFoundException e) {
-      throw new InvalidUserException();
+    @Override
+    public boolean removeToken(String token) throws InvalidTokenException {
+        if (tokenEntity.contains(token)) {
+            tokenEntity.removeToken(token);
+            return true;
+        }
+        throw new InvalidTokenException();
     }
-  }
 
+    @Override
+    public AuthToken generateToken(User user) throws UserNotFoundException {
+        var userInDb = userService.getUser(user.getUsername());
+        if (userInDb != null && userInDb.isActive() && userInDb.equals(user)) {
+            userInDb.setRememberMe(user.isRememberMe());
+            var token = tokenEntity.generateToken(userInDb);
+            addToken(token);
+            return token;
+        }
+        throw new UserNotFoundException(user.getUsername());
+    }
 
+    @Override
+    public void addToken(AuthToken authToken) {
+        tokenEntity.addToken(authToken.getToken(), authToken);
+    }
+
+    @Override
+    public AuthToken getToken(String token) throws InvalidTokenException {
+        var authToken = tokenEntity.getUserToken(token);
+        if (authToken != null) {
+            return authToken;
+        }
+        throw new InvalidTokenException();
+    }
+
+    @Override
+    public List<AuthToken> getTokens() {
+        return tokenEntity.getTokens();
+    }
 }

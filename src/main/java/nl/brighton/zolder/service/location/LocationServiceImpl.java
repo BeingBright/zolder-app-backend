@@ -1,78 +1,82 @@
 package nl.brighton.zolder.service.location;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import nl.brighton.zolder.dto.Location;
-import nl.brighton.zolder.dto.types.BuildingLocationType;
-import nl.brighton.zolder.dto.types.InventoryLocationType;
+import nl.brighton.zolder.model.Location;
 import nl.brighton.zolder.persistance.LocationRepository;
-import nl.brighton.zolder.resource.exception.LocationNotFoundException;
 import nl.brighton.zolder.service.location.exception.DuplicateLocationException;
-import nl.brighton.zolder.service.location.exception.UnknownLocationException;
+import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
-@Service
-@Setter(AccessLevel.NONE)
 @Getter(AccessLevel.NONE)
-public class LocationServiceImpl implements
-    LocationService {
+@Setter(AccessLevel.NONE)
+@Service
+public class LocationServiceImpl implements LocationService {
 
-  private final LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
-  @Override
-  public List<Location> getLocations() {
-    return locationRepository.findAll();
-  }
-
-  @Override
-  public List<Location> getLocation(BuildingLocationType buildingLocationType) {
-    return locationRepository.getLocationsByBuildingLocation(buildingLocationType);
-  }
-
-  @Override
-  public Location getLocation(BuildingLocationType buildingLocationType,
-      InventoryLocationType inventoryLocationType) {
-    return locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
-        buildingLocationType, inventoryLocationType);
-  }
-
-  @Override
-  public Location getLocation(String Id) throws UnknownLocationException {
-    var loc = locationRepository.findById(Id);
-    if (loc.isPresent()) {
-      return loc.get();
+    @Override
+    public List<Location> getLocations() {
+        return locationRepository.findAll();
     }
-    throw new UnknownLocationException();
-  }
 
-  @Override
-  public Location addLocation(Location location) throws DuplicateLocationException {
-    var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
-        location.getBuildingLocation(), location.getInventoryLocation());
-    if (locInDb == null || !locInDb.equals(location)) {
-      return locationRepository.save(location);
+    @Override
+    public List<Location> getLocations(String buildingLocation) throws LocationNotFoundException {
+        var locations = locationRepository.getLocationsByBuildingLocation(buildingLocation);
+        if (locations != null) {
+            return locations;
+        }
+        throw new LocationNotFoundException(buildingLocation);
     }
-    throw new DuplicateLocationException();
-  }
 
-  @Override
-  public Location updateLocation(Location location) throws LocationNotFoundException {
-    var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(
-        location.getBuildingLocation(), location.getInventoryLocation());
-    if (locInDb != null && locInDb.getId().equals(location.getId())) {
-      return locationRepository.save(location);
+    @Override
+    public Location getLocations(String buildingLocation, String inventoryLocation) throws LocationNotFoundException {
+        var locations = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(buildingLocation, inventoryLocation);
+        if (locations != null) {
+            return locations;
+        }
+        throw new LocationNotFoundException(buildingLocation);
     }
-    throw new LocationNotFoundException();
-  }
 
-  @Override
-  public boolean removeLocation(Location location) throws UnknownLocationException {
-    var locInDb = getLocation(location.getId());
-    locationRepository.delete(locInDb);
-    return true;
-  }
+    @Override
+    public Location getLocation(String locationId) throws LocationNotFoundException {
+        var location = locationRepository.getLocationById(locationId);
+        if (location != null) {
+            return location;
+        }
+        throw new LocationNotFoundException(locationId);
+    }
+
+    @Override
+    public Location addLocation(Location location) throws DuplicateLocationException {
+        var locInDb = locationRepository.getLocationsByBuildingLocationAndInventoryLocation(location.getBuildingLocation(), location.getInventoryLocation());
+        if (locInDb == null) {
+            return locationRepository.save(location);
+        }
+        throw new DuplicateLocationException(location);
+    }
+
+    @Override
+    public Location updateLocation(Location location) throws LocationNotFoundException {
+        var locInDb = locationRepository.getLocationById(location.getId());
+        if (locInDb != null) {
+            return locationRepository.save(location);
+        }
+        throw new LocationNotFoundException(location);
+    }
+
+    @Override
+    public boolean removeLocation(Location location) throws LocationNotFoundException {
+        var locInDb = locationRepository.getLocationById(location.getId());
+        if (locInDb != null) {
+            locationRepository.delete(locInDb);
+            return true;
+        }
+        throw new LocationNotFoundException(location);
+    }
 }

@@ -1,20 +1,16 @@
 package nl.brighton.zolder.persistance;
 
-import java.util.List;
-import nl.brighton.zolder.dto.Location;
-import nl.brighton.zolder.dto.types.BuildingLocationType;
-import nl.brighton.zolder.dto.types.InventoryLocationType;
+import nl.brighton.zolder.model.Location;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
+
 public interface LocationRepository extends MongoRepository<Location, String> {
 
-  List<Location> getLocationsByBuildingLocation(BuildingLocationType buildingLocationType);
+    List<Location> getLocationsByBuildingLocation(String buildingLocation);
 
-  Location getLocationsByBuildingLocationAndInventoryLocation(
-      BuildingLocationType buildingLocationType,
-      InventoryLocationType inventoryLocationType);
+    Location getLocationsByBuildingLocationAndInventoryLocation(String buildingLocation, String inventoryLocation);
 
+    Location getLocationById(String Id);
 
 }
