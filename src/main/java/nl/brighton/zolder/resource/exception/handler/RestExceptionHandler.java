@@ -25,7 +25,6 @@ public class RestExceptionHandler {
 
   @ExceptionHandler({
           NoHandlerFoundException.class,
-          InvalidTokenException.class,
           BookNotFoundException.class,
           LocationNotFoundException.class,
           UserNotFoundException.class
@@ -51,10 +50,13 @@ public class RestExceptionHandler {
   })
   public ResponseEntity<JSONException> notModifiedHandler(Exception e, WebRequest webRequest) {
     LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
-    return buildResponse(HttpStatus.UNAUTHORIZED, e);
+    return buildResponse(HttpStatus.NOT_MODIFIED, e);
   }
 
-  @ExceptionHandler({AccessDeniedException.class})
+  @ExceptionHandler({
+          AccessDeniedException.class,
+          InvalidTokenException.class
+  })
   public ResponseEntity<JSONException> forbiddenHandler(Exception e, WebRequest webRequest) {
     LOGGER.error("'{}' {}", e.getMessage(), webRequest.getDescription(false));
     return buildResponse(HttpStatus.UNAUTHORIZED, e);

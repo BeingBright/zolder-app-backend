@@ -1,9 +1,13 @@
 package nl.brighton.zolder.resource.location;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import nl.brighton.zolder.model.Book;
 import nl.brighton.zolder.model.Location;
 import nl.brighton.zolder.resource.WebSocketMessagingController;
 import nl.brighton.zolder.service.location.LocationService;
@@ -31,6 +35,18 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Location>> getLocations() {
+        try {
+            locationService.addLocation(new Location(null, 10, 10, "Celc", "Bg", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Celc", "BD", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Celc", "W", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Celc", "V", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Lorz", "Bg", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Lorz", "BD", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Lorz", "W", new ArrayList<>()));
+            locationService.addLocation(new Location(null, 10, 10, "Celc", "V", new ArrayList<>()));
+        } catch (DuplicateLocationException e) {
+
+        }
         return ResponseEntity.ok(locationService.getLocations());
     }
 

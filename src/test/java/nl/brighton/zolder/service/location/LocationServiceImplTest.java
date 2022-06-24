@@ -2,6 +2,7 @@ package nl.brighton.zolder.service.location;
 
 import nl.brighton.zolder.model.Location;
 import nl.brighton.zolder.persistance.LocationRepository;
+import nl.brighton.zolder.service.book.BookService;
 import nl.brighton.zolder.service.location.exception.DuplicateLocationException;
 import nl.brighton.zolder.service.location.exception.LocationNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +20,13 @@ import static org.mockito.Mockito.when;
 class LocationServiceImplTest {
 
     private LocationRepository mockedLocationRepository;
+    private BookService mockedBookService;
     private LocationServiceImpl sut;
 
     @BeforeEach
     void setUp() {
         mockedLocationRepository = mock(LocationRepository.class);
+        mockedBookService = mock(BookService.class);
 
         when(mockedLocationRepository.getLocationById("ID1")).thenReturn(getPreBuildLocation());
         when(mockedLocationRepository.getLocationById("NOT HERE")).thenReturn(null);
@@ -39,7 +42,7 @@ class LocationServiceImplTest {
 
         when(mockedLocationRepository.findAll()).thenReturn(getLocationList());
 
-        sut = new LocationServiceImpl(mockedLocationRepository);
+        sut = new LocationServiceImpl(mockedLocationRepository, mockedBookService);
     }
 
     @Test
