@@ -56,7 +56,7 @@ public class BookServiceImpl implements BookService {
     public boolean removeBook(Book book) throws BookNotFoundException {
         var bookInDb = bookRepository.getById(book.getId());
         if (bookInDb != null) {
-            bookRepository.save(book);
+            bookRepository.delete(book);
             return true;
         }
         throw new BookNotFoundException(book);
