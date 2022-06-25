@@ -35,18 +35,6 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Location>> getLocations() {
-        try {
-            locationService.addLocation(new Location(null, 10, 10, "Celc", "Bg", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Celc", "BD", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Celc", "W", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Celc", "V", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Lorz", "Bg", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Lorz", "BD", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Lorz", "W", new ArrayList<>()));
-            locationService.addLocation(new Location(null, 10, 10, "Celc", "V", new ArrayList<>()));
-        } catch (DuplicateLocationException e) {
-
-        }
         return ResponseEntity.ok(locationService.getLocations());
     }
 
@@ -57,7 +45,7 @@ public class LocationResource {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/location/{buildingLocation}/inventoryLocation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/location/{buildingLocation}/{inventoryLocation}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Location> getLocations(@PathVariable String buildingLocation, @PathVariable String inventoryLocation) throws LocationNotFoundException {
         return ResponseEntity.ok(locationService.getLocations(buildingLocation, inventoryLocation));
     }
