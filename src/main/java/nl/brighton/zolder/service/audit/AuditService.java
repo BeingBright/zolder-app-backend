@@ -18,4 +18,6 @@ public interface AuditService {
     List<LocationAudit> getLocationAudits(User user) throws UserNotFoundException;
 
     List<LocationAudit> getLocationAudits(Book book) throws BookNotFoundException;
+
+    void addBookAudit(Book book, String username);
 }

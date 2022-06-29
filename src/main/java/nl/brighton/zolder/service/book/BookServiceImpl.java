@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import nl.brighton.zolder.model.Book;
+import nl.brighton.zolder.persistance.BookAuditRepository;
 import nl.brighton.zolder.persistance.BookRepository;
 import nl.brighton.zolder.service.book.exception.BookNotFoundException;
 import nl.brighton.zolder.service.book.exception.DuplicateBookException;
