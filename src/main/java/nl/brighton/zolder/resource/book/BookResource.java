@@ -50,7 +50,7 @@ public class BookResource {
     @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> addBook(@RequestBody Book book) throws DuplicateBookException {
         var savedBook = bookService.addBook(book);
-        messagingController.sendUpdate("/book");
+        messagingController.sendUpdate("/book",savedBook);
         return ResponseEntity.ok(savedBook);
     }
 
@@ -61,7 +61,7 @@ public class BookResource {
         var savedBook = bookService.updateBook(book);
         var authToken = authService.getToken(authorization);
         auditService.addBookAudit(savedBook, authToken.getUsername());
-        messagingController.sendUpdate("/book");
+        messagingController.sendUpdate("/book",savedBook);
         return ResponseEntity.ok(savedBook);
     }
 

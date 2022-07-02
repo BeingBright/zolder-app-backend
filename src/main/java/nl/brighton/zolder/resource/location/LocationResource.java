@@ -60,16 +60,18 @@ public class LocationResource {
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Location> addLocation(@RequestBody Location location) throws DuplicateLocationException {
-        messagingController.sendUpdate("/location");
-        return ResponseEntity.ok(locationService.addLocation(location));
+        var newLoc = locationService.addLocation(location);
+        messagingController.sendUpdate("/location", newLoc);
+        return ResponseEntity.ok(newLoc);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
     @ResponseBody
     @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Location> updateLocation(@RequestBody Location location) throws LocationNotFoundException {
-        messagingController.sendUpdate("/location");
-        return ResponseEntity.ok(locationService.updateLocation(location));
+        var newLoc = locationService.updateLocation(location);
+        messagingController.sendUpdate("/location", newLoc);
+        return ResponseEntity.ok(newLoc);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
