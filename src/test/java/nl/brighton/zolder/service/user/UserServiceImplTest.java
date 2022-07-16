@@ -66,11 +66,6 @@ class UserServiceImplTest {
         verify(mockedUserRepository).getByUsername(null);
         verify(mockedUserRepository).save(new User());
 
-        result = sut.addUser(alterUser(false));
-        assertEquals(alterUser(), result);
-        verify(mockedUserRepository).getByUsername(alterUser().getUsername());
-        verify(mockedUserRepository).save(alterUser(true));
-
         assertThrows(DuplicateUserException.class, () -> sut.addUser(baseUser()));
 
     }
@@ -79,7 +74,7 @@ class UserServiceImplTest {
     void removeUser() throws UserNotFoundException {
 
         assertTrue(sut.removeUser(baseUser(true)));
-        verify(mockedUserRepository).save(baseUser(false));
+        verify(mockedUserRepository).delete(baseUser(true));
 
         assertThrows(UserNotFoundException.class, () -> sut.removeUser(new User()));
     }
