@@ -22,7 +22,7 @@ public class User {
     @EqualsAndHashCode.Include
     private String username;
     @EqualsAndHashCode.Include
-    private String password;
+    private String password="";
     private boolean isActive = false;
     private UserRoleType role;
     @Transient
