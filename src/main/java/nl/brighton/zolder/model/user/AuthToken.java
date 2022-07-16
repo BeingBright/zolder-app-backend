@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"expireDate"})
 @Document(collection = "auth-token")
 @CompoundIndex(name = "token-index", def = "{'token':1}", unique = true)
 

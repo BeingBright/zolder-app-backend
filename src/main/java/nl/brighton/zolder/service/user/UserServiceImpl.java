@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User addUser(User user) throws DuplicateUserException {
         var userInDb = userRepository.getByUsername(user.getUsername());
-        if (userInDb == null) {
+        if (userInDb == null && user.getPassword() != null) {
             return userRepository.save(user);
         }
         throw new DuplicateUserException(user.getUsername());
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User updateUser(User user) throws UserNotFoundException {
-        if (userRepository.getById(user.getId()) != null) {
+        if (userRepository.getById(user.getId()) != null && user.getPassword() != null) {
             return userRepository.save(user);
         }
         throw new UserNotFoundException(user.getUsername());
