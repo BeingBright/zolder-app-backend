@@ -45,9 +45,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         var userInDb = userRepository.getByUsername(user.getUsername());
         if (userInDb == null) {
             return userRepository.save(user);
-        } else if (!userInDb.isActive()) {
-            userInDb.setActive(true);
-            return userRepository.save(userInDb);
         }
         throw new DuplicateUserException(user.getUsername());
     }
@@ -55,8 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean removeUser(User user) throws UserNotFoundException {
         if (userRepository.getById(user.getId()) != null) {
-            user.setActive(false);
-            userRepository.save(user);
+            userRepository.delete(user);
             return true;
         }
         throw new UserNotFoundException(user.getUsername());

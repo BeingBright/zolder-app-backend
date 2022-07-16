@@ -11,8 +11,6 @@ import nl.brighton.zolder.service.auth.exception.InvalidTokenException;
 import nl.brighton.zolder.service.user.exception.UserNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,12 +36,4 @@ public class AuthResource {
         authService.removeToken(authorization);
         return ResponseEntity.ok().build();
     }
-
-    // /app/hello
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public String PingSTOMP() throws Exception {
-        return "PONG SEND BY STOMPING";
-    }
-//simpMessagingTemplate.convertAndSend("/topic/greetings","Send to all users");
 }
